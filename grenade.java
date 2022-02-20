@@ -23,7 +23,7 @@ public class grenade extends projectile{
     }
 
     public void tick() {
-        if (handler.grenadeTimer() > 0) handler.setGtimer(handler.grenadeTimer() - 1);
+        System.out.println(handler.grenadeTimer());
         posx += velx;
         posy += vely;
 

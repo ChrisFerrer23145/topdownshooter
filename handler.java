@@ -14,6 +14,8 @@ public class handler {
             gameObject tempObject = object.get(i);
             tempObject.tick();
         }
+        if (grenadeTimer() > 0) setGtimer(grenadeTimer() - 1);
+        if (lureTimer() > 0) setTimer(lureTimer() - 1);
     }
 
     public void render(Graphics g) {

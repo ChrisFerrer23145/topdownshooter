@@ -21,7 +21,7 @@ public class lure extends projectile {
     
     
     public void tick() {
-        if (handler.lureTimer() > 0) handler.setTimer(handler.lureTimer() - 1);
+
         posx += velx;
         posy += vely;
 

@@ -35,7 +35,7 @@ public class character extends gameObject{
 
         while (healthCt < (int) (eneCnt/10)) {
             healthCt++;
-            if (health > 85) health += 15;
+            if (health <= 85) health += 15;
             else health += 100 - health;
 
         }

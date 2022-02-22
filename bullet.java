@@ -1,16 +1,18 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 public class bullet extends projectile{
 
     handler handler;
+    private BufferedImage bullet;
 
     public bullet(int posx, int posy, int health, id id, handler handler, int mx, int my, spriteSheet ss) {
         super(posx, posy, health, id, ss);
         this.handler = handler;
 
         angle(posx, posy, mx, my);
+        bullet = ss.grabImage(42, 0, 10, 8);
     }
 
     public void tick() {
@@ -22,8 +24,7 @@ public class bullet extends projectile{
     }
 
     public void render(Graphics g) {
-        g.setColor(Color.green);
-        g.fillOval(posx, posy, 10, 8);
+        g.drawImage(bullet, posx, posy, null);
     }
 
     public Rectangle getBounds() {

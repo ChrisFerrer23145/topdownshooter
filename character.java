@@ -13,7 +13,7 @@ public class character extends gameObject{
         super(posx, posy, health, id, ss);
         super.weapon(weapon, weapons);
         this.handler = handler;
-        character = ss.grabImage(1, 1, 32, 48);
+        character = ss.grabImage(0, 0, 32, 48);
 
     }
 

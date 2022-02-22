@@ -14,7 +14,7 @@ public class enemy extends gameObject{
         super(posx, posy, health, id, ss);
         this.handler = handler;
 
-        ene = ss.grabImage(4, 1, 32, 32);
+        ene = ss.grabImage(64, 0, 32, 32);
     }
 
     public void tick() {

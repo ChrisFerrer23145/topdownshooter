@@ -1,4 +1,5 @@
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
 public class handler {
@@ -7,6 +8,12 @@ public class handler {
     private boolean up = false, down = false, left = false, right = false;
     private int timer = 0;
     private int gtimer = 0;
+    spriteSheet ss;
+    private int extimer = 0;
+    private int exx = 0, exy = 0;
+    private BufferedImage explode1;
+    private BufferedImage explode2;
+    private BufferedImage explode3;
 
 
     public void tick() {
@@ -22,6 +29,21 @@ public class handler {
         for(int i = 0; i <object.size(); i++){
             gameObject tempObject = object.get(i);
             tempObject.render(g);
+        }
+
+        if (extimer > 0) {
+            g.drawImage(explode1, exx - 32, exy - 32, null);
+            g.drawImage(explode2, exx, exy - 32, null);
+            g.drawImage(explode3, exx + 32, exy - 32, null);
+
+            g.drawImage(explode2, exx - 32, exy, null);
+            g.drawImage(explode3, exx, exy, null);
+            g.drawImage(explode1, exx + 32, exy, null);
+
+            g.drawImage(explode3, exx - 32, exy + 32, null);
+            g.drawImage(explode1, exx, exy + 32, null);
+            g.drawImage(explode2, exx + 32, exy + 32, null);
+            extimer--;
         }
 
     }
@@ -80,6 +102,16 @@ public class handler {
 
     public int grenadeTimer() {
         return gtimer;
+    }
+
+    public void gExplode(int x, int y, spriteSheet ss) {
+        this.ss = ss;
+        extimer = 60;
+        explode1 = ss.grabImage(256, 0, 64, 64);
+        explode2 = ss.grabImage(128, 0, 64, 64);
+        explode3 = ss.grabImage(192, 0, 64, 64);
+        exx = x;
+        exy = y;
     }
 
 }

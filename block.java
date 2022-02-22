@@ -10,7 +10,7 @@ public class block extends gameObject {
     public block(int posx, int posy, int health, id id, spriteSheet ss) {
         super(posx, posy, health, id, ss);
 
-        wall = ss.grabImage(6, 2, 32, 32);
+        wall = ss.grabImage(64, 32, 32, 32);
     }
 
     public void tick() {

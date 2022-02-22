@@ -35,7 +35,7 @@ class Game extends Canvas implements Runnable {
         level = loader.loadImage("src/level.png");
         spriteSheet = loader.loadImage("src/spriteSheet.png");
         ss = new spriteSheet(spriteSheet);
-        floor = ss.grabImage(5, 2, 32, 32);
+        floor = ss.grabImage(32, 30, 32, 32);
         this.addMouseListener(new mouseInput(handler, camera, this, ss));
         
         loadLevel(level);

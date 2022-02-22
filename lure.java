@@ -1,6 +1,6 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 public class lure extends projectile {
 
@@ -8,6 +8,7 @@ public class lure extends projectile {
     private int mx;
     private int my;
     private int counter = 900;
+    private BufferedImage lure;
 
     public lure(int posx, int posy, int health, id id, handler handler, int mx, int my, spriteSheet ss) {
         super(posx, posy, health, id, ss);
@@ -16,6 +17,7 @@ public class lure extends projectile {
         this.my = my;
 
         angle(posx, posy, mx, my);
+        lure = ss.grabImage(32, 0, 10, 10);
         handler.setTimer(600);
     }
     
@@ -41,8 +43,7 @@ public class lure extends projectile {
     }
 
     public void render(Graphics g) {
-        g.setColor(Color.blue);
-        g.fillRect(posx, posy, 10, 10);
+        g.drawImage(lure, posx, posy, null);
     }
 
     public Rectangle getBounds() {

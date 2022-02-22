@@ -1,13 +1,14 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class grenade extends projectile{
 
     private int mx, my, counter;
-    Graphics g;
+
     handler handler;
+    private BufferedImage grenade;
 
     public grenade(int posx, int posy, int health, id id, handler handler, int mx, int my, spriteSheet ss) {
         super(posx, posy, health, id, ss);
@@ -17,6 +18,7 @@ public class grenade extends projectile{
         counter = 180;
 
         angle(posx, posy, mx, my);
+        grenade = ss.grabImage(32, 10, 20, 20);
 
         handler.setGtimer(300);
         
@@ -36,7 +38,8 @@ public class grenade extends projectile{
 
         counter--;
         if (counter <= 0) {
-            detonate(g);
+            detonate();
+            handler.gExplode(posx, posy, ss);
             handler.removeObject(this);
         }
 
@@ -92,16 +95,14 @@ public class grenade extends projectile{
 
     }
     public void render(Graphics g) {
-        this.g = g;
-        g.setColor(Color.blue);
-        g.fillOval(posx, posy, 20, 20);
+        g.drawImage(grenade, posx, posy, null);
     }
 
     public Rectangle getBounds() {
         return new Rectangle(posx, posy, 20, 20);
     }
 
-    private void detonate(Graphics g) {
+    private void detonate() {
         ArrayList<gameObject> temp = new ArrayList<gameObject>();
         for(int i = 0; i < handler.object.size(); i++){
             gameObject tempObject = handler.object.get(i);
@@ -118,9 +119,6 @@ public class grenade extends projectile{
                 tempObject.setHealth(tempObject.getHealth() - 75);
             }
         }
-        g.setColor(Color.orange);
-        g.fillOval(posx, posy, 300, 300);
-
 
     }
     

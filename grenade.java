@@ -117,6 +117,15 @@ public class grenade extends projectile{
             gameObject tempObject = temp.get(i);
             if(tempObject.getId() == id.Enemy){
                 tempObject.setHealth(tempObject.getHealth() - 75);
+                if (tempObject.getHealth() <= 0) {
+                    for(int ii = 0; ii < handler.object.size(); ii++){
+                        gameObject tempObject2 = handler.object.get(ii);
+                        if(tempObject2.getId() == id.Character){
+                            tempObject2.eneCnt++;
+                        }
+                    }
+                    handler.removeObject(tempObject);
+                }
             }
         }
 

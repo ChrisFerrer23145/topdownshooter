@@ -23,11 +23,11 @@ public class bullet extends projectile{
 
     public void render(Graphics g) {
         g.setColor(Color.green);
-        g.fillOval(posx, posy, 8, 8);
+        g.fillOval(posx, posy, 10, 8);
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(posx, posy, 8, 8);
+        return new Rectangle(posx, posy, 10, 8);
     }
 
     public void collision() {

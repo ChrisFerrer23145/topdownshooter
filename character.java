@@ -9,6 +9,8 @@ public class character extends gameObject{
     public String weapon = "bullet";
     private BufferedImage character;
     private int healthCt = 0;
+    private int armor = 1;
+    private int dmgtickct = 1;
 
     public character(int posx, int posy, int health, id id, handler handler, spriteSheet ss) {
         super(posx, posy, health, id, ss);
@@ -34,6 +36,10 @@ public class character extends gameObject{
         while (healthCt < (int) (eneCnt/10)) {
             healthCt++;
             health += 15;
+        }
+
+        while (armor - 1 < (int) (eneCnt/15)) {
+            armor++;
         }
 
         if (handler.getUp()) vely = -5;
@@ -76,7 +82,10 @@ public class character extends gameObject{
             }
             if (tempObject.getId() == id.Enemy) {
                 if (getBounds().intersects(tempObject.getBounds())) {
-                    this.health -= 1;
+                    if (dmgtickct % armor == 0){
+                        this.health -= 1;
+                    }
+                    dmgtickct++;
                 }
             }
         }

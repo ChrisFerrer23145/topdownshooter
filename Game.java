@@ -151,7 +151,7 @@ class Game extends Canvas implements Runnable {
         g.setColor(Color.green);
         g.fillRect(5, 5, hp, 16);
         g.setColor(Color.red);
-        g.fillRect(hp, 5, 200-hp, 16);
+        g.fillRect(hp + 5, 5, 200-hp, 16);
         g.setColor(Color.white);
         g.fillRect(5, 21, 200, 25);
         g.setColor(Color.black);

@@ -1,5 +1,7 @@
 import java.awt.Canvas;
 import java.awt.Color;
+//import font
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
@@ -138,16 +140,24 @@ class Game extends Canvas implements Runnable {
 
         
         int hp = 100;
+        int eneCnt = 0;
         for(int i = 0; i < handler.object.size(); i++){
             gameObject tempObject = handler.object.get(i);
             if(tempObject.getId() == id.Character){
                 hp = tempObject.getHealth() * 2;
+                eneCnt = tempObject.eneCnt;
             }
         }
         g.setColor(Color.green);
         g.fillRect(5, 5, hp, 16);
         g.setColor(Color.red);
         g.fillRect(hp, 5, 200-hp, 16);
+        g.setColor(Color.white);
+        g.fillRect(5, 21, 200, 25);
+        g.setColor(Color.black);
+        g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, 20));
+        
+        g.drawString("Enemies killed: " + eneCnt, 5, 40);
 
         g.dispose();
         bs.show();

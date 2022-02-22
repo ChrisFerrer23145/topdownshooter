@@ -8,6 +8,7 @@ public class character extends gameObject{
     public Object[][] weapons = {{"bullet", "lure", "grenade"}, {id.Bullet, id.Lure, id.Grenade}};
     public String weapon = "bullet";
     private BufferedImage character;
+    private int healthCt = 0;
 
     public character(int posx, int posy, int health, id id, handler handler, spriteSheet ss) {
         super(posx, posy, health, id, ss);
@@ -28,6 +29,11 @@ public class character extends gameObject{
             handler.setUp(false);
             handler.setLeft(false);
             handler.setRight(false);
+        }
+
+        while (healthCt < (int) (eneCnt/10)) {
+            healthCt++;
+            health += 15;
         }
 
         if (handler.getUp()) vely = -5;

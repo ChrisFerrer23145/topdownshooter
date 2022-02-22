@@ -59,6 +59,14 @@ public class enemy extends gameObject{
                 if (getBounds().intersects(tempObject.getBounds())) {
                     handler.removeObject(tempObject);
                     this.health -= 10;
+                    if (this.health <= 0) {
+                        for(int ii = 0; ii < handler.object.size(); ii++){
+                            gameObject temp = handler.object.get(ii);
+                            if(temp.getId() == id.Character){
+                                temp.eneCnt++;
+                            }
+                        }
+                    }
                     aggro = 0;
                     
                 }

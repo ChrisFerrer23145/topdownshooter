@@ -7,6 +7,7 @@ public abstract class gameObject {
     protected int health;
     protected float velx = 0;
     protected float vely = 0;
+    public int eneCnt = 0;
     protected id id;
     protected String wep;
     protected Object[][] wepList;

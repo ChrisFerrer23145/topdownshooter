@@ -1,54 +1,32 @@
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class mouseInput extends MouseAdapter {
 
-    handler handler;
-    camera camera;
     spriteSheet ss;
     Game game;
+    playCard pCard;
+    ArrayList<Card> hand;
+    ArrayList<Card> other;
 
-    public mouseInput(handler handler, camera camera, Game game, spriteSheet ss) {
-        this.handler = handler;
-        this.camera = camera;
+
+    public mouseInput(Game game, spriteSheet ss, playCard pCard, ArrayList<Card> hand, ArrayList<Card> other) {
         this.game = game;
         this.ss = ss;
+        this.pCard = pCard;
+        this.hand = hand;
+        this.other = other;
     }
 
     public void mousePressed(MouseEvent e) {
-        int mx = (int) e.getX() + (int) camera.getX();
-        int my = (int) e.getY() + (int) camera.getY();
-        
-        for (int i = 0; i < handler.object.size(); i++) {
-            gameObject tempObject = handler.object.get(i);
-            
-            if (tempObject.getId() == id.Character) {
-                if (e.getButton() == MouseEvent.BUTTON1) {
-                    if (tempObject.wep == "bullet") {
-                        handler.addObject(new bullet(tempObject.getx() + 16, tempObject.gety() + 24, Integer.MAX_VALUE, id.Bullet, handler, mx, my, ss));
-                    } else if (tempObject.wep == "lure" && handler.lureTimer() == 0) {
-                        System.out.println(handler.lureTimer());
-                        handler.addObject(new lure(tempObject.getx() + 16, tempObject.gety() + 24, Integer.MAX_VALUE, id.Lure, handler, mx, my, ss));
-                    } else if (tempObject.wep == "grenade" && handler.grenadeTimer() == 0) {
-                        System.out.println(handler.grenadeTimer());
-                        handler.addObject(new grenade(tempObject.getx() + 16, tempObject.gety() + 24, Integer.MAX_VALUE, id.Grenade, handler, mx, my, ss));
 
-                    }
-                }
-            }
+        if (e.getButton() == MouseEvent.BUTTON1 && other.size() != 0 && hand.size() != 0) {
+            pCard.setAwait(!pCard.getAwait());
         }
     }
 
     public void mouseReleased(MouseEvent e) {
-        
-        for (int i = 0; i < handler.object.size(); i++) {
-            gameObject tempObject = handler.object.get(i);
-            
-            if (tempObject.getId() == id.Character) {
-                if (e.getButton() == MouseEvent.BUTTON1) {
-                }
-            }
-        }
     }
     
 }

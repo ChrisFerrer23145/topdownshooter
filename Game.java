@@ -1,59 +1,44 @@
 import java.awt.Canvas;
 import java.awt.Color;
-//import font
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 class Game extends Canvas implements Runnable {
     private boolean running = false;
     private Thread thread;
-    private handler handler;
-    private camera camera;
+    private spriteSheet css;
     private spriteSheet ss;
-    private spawningAlgorithm algorithm;
-
-    private BufferedImage level = null;
-    private projectile projectile;
+    private BufferedImage cardsSpriteSheet = null;
     private BufferedImage spriteSheet = null;
-    private BufferedImage floor = null;
-
+    private dealCards dealCards;
+    private Cards cards;
+    private ArrayList<Card> hand = new ArrayList<Card>();
+    private ArrayList<Card> other = new ArrayList<Card>();
+    private ArrayList<Card> table = new ArrayList<Card>();
+    private playCard playCard;
     public static void main(String[] args) throws Exception {
         new Game();
     }
 
     public Game() {
-        new window(1000, 563, "Top Down Shooter", this);
-        start();
-
-        handler = new handler();
-        camera = new camera(0, 0);
-        projectile = new projectile(handler);
-        this.addKeyListener(new keyInput(handler, projectile));
+        new window(1000, 563, "War", this);
         
-        imgLoader loader = new imgLoader(); 
-        level = loader.loadImage("src/level.png");
-        spriteSheet = loader.loadImage("src/spriteSheet.png");
+        imgLoader loader = new imgLoader();
+        cardsSpriteSheet = loader.loadImage("src/cards.png");
+        spriteSheet = loader.loadImage("src/spritesheet.png");
+        css = new spriteSheet(cardsSpriteSheet);
         ss = new spriteSheet(spriteSheet);
-        floor = ss.grabImage(32, 30, 32, 32);
-        this.addMouseListener(new mouseInput(handler, camera, this, ss));
+        cards = new Cards(css, ss);
+        dealCards = new dealCards(css, hand, other, cards);
+        playCard = new playCard(table, hand, other);
+        this.addMouseListener(new mouseInput(this, css, playCard, hand, other));
         
-        loadLevel(level);
-
-        character tempCharacter = null;
-
-        for(int i = 0; i < handler.object.size(); i++){
-            gameObject tempObject = handler.object.get(i);
-            if(tempObject.getId() == id.Character){
-                tempCharacter = (character) tempObject;
-            }
-        }
-
-        algorithm = new spawningAlgorithm(handler, camera, ss, tempCharacter);
         
-
+        start();
     }
 
     private void start() {
@@ -80,6 +65,7 @@ class Game extends Canvas implements Runnable {
         long timer = System.currentTimeMillis();
         int updates = 0;
         int frames = 0;
+        long orig = System.currentTimeMillis();
         while (running) {
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
@@ -103,16 +89,6 @@ class Game extends Canvas implements Runnable {
     }
 
     public void tick() {
-
-        for(int i = 0; i < handler.object.size(); i++){
-            gameObject tempObject = handler.object.get(i);
-            if(tempObject.getId() == id.Character){
-                camera.tick(tempObject);
-                algorithm.tick();
-            }
-        }
-
-        handler.tick();
     }
 
     public void render() {
@@ -125,59 +101,25 @@ class Game extends Canvas implements Runnable {
         Graphics g = bs.getDrawGraphics();
         Graphics2D g2d = (Graphics2D) g;
 
-        g2d.translate(-camera.getX(), -camera.getY());
+        g.setColor(java.awt.Color.GRAY);
+        g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-
-        for (int xx = 0; xx < 30*72; xx+=32) {
-            for (int yy = 0; yy < 30*72; yy+=32) {
-                g.drawImage(floor, xx, yy, null);
-
-            }
+        if (hand.size() > 0) {
+            g.drawImage(hand.get(0).getBack(), this.getWidth()/2 - 48, 401, null);
         }
-        handler.render(g);
-
-        g2d.translate(camera.getX(), camera.getY());
-
-        
-        int hp = 100;
-        int eneCnt = 0;
-        for(int i = 0; i < handler.object.size(); i++){
-            gameObject tempObject = handler.object.get(i);
-            if(tempObject.getId() == id.Character){
-                hp = tempObject.getHealth() * 2;
-                eneCnt = tempObject.eneCnt;
-            }
+        if (other.size() > 0) {
+            g.drawImage(other.get(0).getBack(), this.getWidth()/2 - 48, (int) ((this.getHeight()/ 8) - 36), null);
         }
-        g.setColor(Color.green);
-        g.fillRect(5, 5, hp, 16);
-        g.setColor(Color.red);
-        g.fillRect(hp + 5, 5, 200-hp, 16);
-        g.setColor(Color.white);
-        g.fillRect(5, 21, 200, 25);
+        playCard.render(g);
+
         g.setColor(Color.black);
         g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, 20));
         
-        g.drawString("Enemies killed: " + eneCnt, 5, 40);
+        g.drawString("Cards left (hand): " + hand.size(), 531, 457);
+        g.drawString("Cards left (other): " + other.size(), 531, 85);
+        g2d.translate(this.getWidth() / 2, this.getHeight() / 2);
 
         g.dispose();
         bs.show();
-    }
-
-    private void loadLevel(BufferedImage image) {
-        int w = image.getWidth();
-        int h = image.getHeight();
-
-        for (int xx = 0; xx < w; xx++) {
-            for (int yy = 0; yy < h; yy++) {
-                int pixel = image.getRGB(xx, yy);
-                int red = (pixel >> 16) & 0xff;
-                int green = (pixel >> 8) & 0xff;
-                int blue = (pixel) & 0xff;
-
-                if (red == 255) handler.addObject(new block(xx * 32, yy * 32, Integer.MAX_VALUE, id.Block, ss));
-                if (blue == 255) handler.addObject(new character(xx * 32, yy * 32, 100, id.Character, handler, ss));
-                if (green == 255) handler.addObject(new enemy(xx * 32, yy * 32, 100, id.Enemy, handler, ss));
-            }
-        }
     }
 }
